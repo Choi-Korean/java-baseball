@@ -40,6 +40,7 @@ public class Controller {
     }
 
     public void stop(){
+        EndView.printEndGame();
 
     }
 
