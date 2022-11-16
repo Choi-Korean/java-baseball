@@ -1,24 +1,25 @@
 package baseball.controller;
 
+import baseball.service.Number;
 import baseball.view.EndView;
 import baseball.view.StartView;
-import camp.nextstep.edu.missionutils.Randoms;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.*;
 
 public class Controller {
+    final int NUM_LEN = 3;
+    final int MIN_NUM = 1;
+    final int MAX_NUM = 9;
     private Integer GO_STOP = 1;
     private List<Integer> userInput;
-    private List<Integer> computerInput;
+    private static Integer[] computerInput;
     private List<Integer> gameResult;  // 스트라잌, 볼
+    private StartView startView = new StartView();
+    private EndView endView = new EndView();
 
     public void run() {
         if(this.GO_STOP == 1){
-            computerInput = makeComputerNums();
+            setComputerNums();
             start();
-            return;
         }
 
         if(this.GO_STOP == 2){
@@ -28,9 +29,9 @@ public class Controller {
 
     public void start(){
         while(true){
-            userInput = StartView.startGame();
+            userInput = startView.startGame();
             gameResult = countBaseBall(userInput, computerInput);
-            EndView.printGameResult(gameResult);
+            endView.printGameResult(gameResult);
             if(gameResult.get(0) == 3){
                 break;
             }
@@ -39,26 +40,14 @@ public class Controller {
     }
 
     public void stop(){
-        EndView.printEndGame();
-
-        try {
-            GO_STOP = Integer.parseInt(StartView.reGame().readLine());
-        } catch (IOException e) {
-            throw new IllegalArgumentException("입력 오류");
-        }
+        endView.printEndGame();
+        GO_STOP = Integer.parseInt(startView.reGame());
         run();
     }
 
-    public static List<Integer> checkInput(BufferedReader in){
-        String input;
+    public static List<Integer> checkInput(String input){
         char[] charIn;
         List<Integer> intIn;
-
-        try{
-            input = in.readLine();
-        }catch (IOException e) {
-            throw new IllegalArgumentException("입력 오류");
-        }
 
         charIn = input.toCharArray();
         intIn = new ArrayList<>(input.length());
@@ -89,16 +78,16 @@ public class Controller {
     }
 
     // Computer 랜덤 수 생성
-    public static List<Integer> makeComputerNums(){
-        return Randoms.pickUniqueNumbersInRange(1, 9, 3);
+    public void setComputerNums(){
+        computerInput = Number.getRandomNum(NUM_LEN, MIN_NUM, MAX_NUM);
     }
 
     // 볼, 스트라이크 개수 판단
-    public static List<Integer> countBaseBall(List<Integer> user, List<Integer> computer){
+    public static List<Integer> countBaseBall(List<Integer> user, Integer[] computer){
         List<Integer> counts = Arrays.asList(0, 0);
-        Set<Integer> set = new HashSet<>(computer);
+        Set<Integer> set = new HashSet<>(Arrays.asList(computer));
         for(int i = 0; i < user.size(); i ++){
-            if(user.get(i) == computer.get(i)){
+            if(user.get(i) == computer[i]){
                 counts.set(0, counts.get(0) + 1);
                 continue;
             }
@@ -107,10 +96,7 @@ public class Controller {
                 continue;
             }
         }
-
         return counts;
     };
-
-
 
 }
