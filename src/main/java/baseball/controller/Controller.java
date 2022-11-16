@@ -28,10 +28,15 @@ public class Controller {
     }
 
     public void start(){
-        userInput = StartView.startGame();
-        gameResult = countBaseBall(userInput, computerInput);
-        EndView.printGameResult(gameResult);
-
+        while(true){
+            userInput = StartView.startGame();
+            gameResult = countBaseBall(userInput, computerInput);
+            EndView.printGameResult(gameResult);
+            if(gameResult.get(0) == 3){
+                break;
+            }
+        }
+        stop();
     }
 
     public void stop(){
