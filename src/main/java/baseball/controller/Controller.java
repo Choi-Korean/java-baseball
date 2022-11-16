@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Controller {
-    private int GO_STOP = 1;
+    private Integer GO_STOP = 1;
     private List<Integer> userInput;
     private List<Integer> computerInput;
     private List<Integer> gameResult;  // 스트라잌, 볼
@@ -22,7 +22,6 @@ public class Controller {
         }
 
         if(this.GO_STOP == 2){
-            stop();
             return;
         }
     }
@@ -42,6 +41,12 @@ public class Controller {
     public void stop(){
         EndView.printEndGame();
 
+        try {
+            GO_STOP = Integer.parseInt(StartView.reGame().readLine());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("입력 오류");
+        }
+        run();
     }
 
     public static List<Integer> checkInput(BufferedReader in){
