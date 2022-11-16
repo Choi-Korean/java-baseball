@@ -3,6 +3,8 @@ package baseball.controller;
 import baseball.view.StartView;
 import camp.nextstep.edu.missionutils.Randoms;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -10,8 +12,8 @@ import java.util.Set;
 
 public class Controller {
     private int GO_STOP = 1;
-    private Integer[] USER_INPUT;
-    private List<Integer> COMPUTER_INPUT;
+    private Integer[] userInput;
+    private List<Integer> computerInput;
 
     public void run() {
         if(this.GO_STOP == 1){
@@ -26,8 +28,8 @@ public class Controller {
     }
 
     public void start(){
-        USER_INPUT = StartView.startGame();
-        COMPUTER_INPUT = makeComputerNums();
+        userInput = StartView.startGame();
+        computerInput = makeComputerNums();
 
     }
 
@@ -35,7 +37,21 @@ public class Controller {
 
     }
 
-    public static void checkInput(char[] charIn, Integer[] intIn){
+    public static Integer[] checkInput(BufferedReader in){
+        String input;
+        char[] charIn;
+        Integer[] intIn;
+
+        try{
+            input = in.readLine();
+        }catch (IOException e) {
+            throw new IllegalArgumentException("입력 오류");
+        }
+
+        charIn = input.toCharArray();
+        intIn = new Integer[input.length()];
+        Arrays.setAll(intIn, i -> Character.getNumericValue(charIn[i]));
+
         // input이 3개 이상 아닐시
         if(charIn.length != 3){
             throw new IllegalArgumentException("Invalid Input: 3개 이상의 숫자를 입력해주세요.");
@@ -53,6 +69,8 @@ public class Controller {
         if(set.size() != 3){
             throw new IllegalArgumentException("Invalid Input: 중복되지 않는 3개 이상의 숫자를 입력입니다.");
         }
+
+        return intIn;
 
     }
 
