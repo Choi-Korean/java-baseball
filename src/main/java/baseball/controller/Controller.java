@@ -1,5 +1,6 @@
 package baseball.controller;
 
+import baseball.view.EndView;
 import baseball.view.StartView;
 import camp.nextstep.edu.missionutils.Randoms;
 
@@ -11,9 +12,11 @@ public class Controller {
     private int GO_STOP = 1;
     private List<Integer> userInput;
     private List<Integer> computerInput;
+    private List<Integer> gameResult;  // 스트라잌, 볼
 
     public void run() {
         if(this.GO_STOP == 1){
+            computerInput = makeComputerNums();
             start();
             return;
         }
@@ -26,9 +29,8 @@ public class Controller {
 
     public void start(){
         userInput = StartView.startGame();
-        computerInput = makeComputerNums();
-        System.out.println(computerInput);
-        System.out.println(countBaseBall(userInput, computerInput));
+        gameResult = countBaseBall(userInput, computerInput);
+        EndView.printGameResult(gameResult);
 
     }
 
