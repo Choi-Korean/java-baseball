@@ -27,6 +27,7 @@ public class Controller {
 
     public void start(){
         USER_INPUT = StartView.startGame();
+        COMPUTER_INPUT = makeComputerNums();
 
     }
 
@@ -53,6 +54,10 @@ public class Controller {
             throw new IllegalArgumentException("Invalid Input: 중복되지 않는 3개 이상의 숫자를 입력입니다.");
         }
 
+    }
+
+    public static List<Integer> makeComputerNums(){
+        return Randoms.pickUniqueNumbersInRange(1, 9, 3);
     }
 
 }
